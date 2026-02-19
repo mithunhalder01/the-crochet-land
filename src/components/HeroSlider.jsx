@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 
 const images = [
-  "/slide1.png",
-  "/slide2.png",
-  "/slide3.jpeg",
+  "./slide1.png",
+  "./slide2.png",
+  "./slide3.jpeg",
 ];
 
 export default function Hero() {

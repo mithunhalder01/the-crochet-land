@@ -6,7 +6,7 @@ const CrochetBanner = () => {
     {
       title: "Sunflower POT",
       subtitle: "Only this week. Don't miss...",
-      image: "/sunflower.png", // Example URL
+      image: "./sunflower.png", // Example URL
       bgColor: "bg-[#D1E1F0]", // Soft Blue like your promo banner
       textColor: "text-[#2B5BA9]",
       btnColor: "bg-[#2B5BA9]"
@@ -14,7 +14,7 @@ const CrochetBanner = () => {
     {
       title: "Cactus Pot",
       subtitle: "Don't miss the opportunity...",
-      image: "/Cucuts_Pots.png", // Example URL
+      image: "./Cucuts_Pots.png", // Example URL
       bgColor: "bg-[#FFB1B1]/20", // Very light soft pink
       textColor: "text-[#4A3434]",
       btnColor: "bg-[#FFB1B1]"
