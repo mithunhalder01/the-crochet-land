@@ -1,86 +1,67 @@
 import React from 'react';
-// Is line ko PromoBanner.jsx mein update karo
 import { Truck, PhoneCall, RotateCcw, BadgePercent, ArrowRight } from "lucide-react";
 
-export default function TrustSection() {
+export default function CompactTrustSection() {
   return (
-    // Section Background: Light Gray
-    <section className="bg-gray-50 py-16 relative overflow-hidden">
-      
-      {/* --- BACKGROUND PIXEL HEARTS (Decorative) --- */}
-      <div className="absolute inset-0 opacity-[0.05] pointer-events-none select-none" 
-           style={{ backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 20 20"><path fill="%23FFB1B1" d="M5 2h2v2H5V2zm2 2h2v2H7V4zm4-2h2v2h-2V2zm2 2h2v2h-2V4zM3 4h2v2H3V4zm0 2h2v2H3V6zm2 2h2v2H5V8zm2 2h2v2H7v-2zm4-2h2v2h-2V8zm2-2h2v2h-2V6zm2-2h2v2h-2V4zm0 2h2v2h-2V6zM9 12h2v2H9v-2zm2 2h2v2h-2v-2zm2 2h2v2h-2v-2zM7 14h2v2H7v-2zm-2 2h2v2H5v-2z"/></svg>')` }}>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+    <section className="bg-white py-10 md:py-16 px-4 md:px-6">
+      <div className="max-w-6xl mx-auto">
         
-        {/* --- 1. TRUST FEATURES STRIP --- */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        {/* --- 1. COMPACT FEATURES GRID --- */}
+        {/* Mobile: 2x2 Grid | Desktop: 4 Columns in a line */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-4 mb-12 md:mb-16">
           
-          {/* Fast Delivery */}
-          <div className="flex items-center gap-4 group">
-            <div className="p-3 bg-white rounded-2xl shadow-sm text-[#FFB1B1] group-hover:bg-[#FFB1B1] group-hover:text-white transition-all duration-300">
-              <Truck size={28} strokeWidth={1.5} />
+          <div className="flex flex-col items-center text-center">
+            <div className="mb-3 text-[#FFB1B1]">
+              <Truck size={24} strokeWidth={1.5} />
             </div>
-            <div>
-              <h4 className="text-sm font-black text-[#4A3434] uppercase tracking-tighter">Fast Delivery</h4>
-              <p className="text-[10px] text-gray-400 font-medium">Fast shipping on all orders</p>
-            </div>
+            <h4 className="text-[11px] font-black text-[#4A3434] uppercase tracking-widest mb-1">Fast Delivery</h4>
+            <p className="text-[9px] text-gray-400 font-medium px-2">Across India</p>
           </div>
 
-          {/* Online Support */}
-          <div className="flex items-center gap-4 group">
-            <div className="p-3 bg-white rounded-2xl shadow-sm text-[#FFB1B1] group-hover:bg-[#FFB1B1] group-hover:text-white transition-all duration-300">
-              <PhoneCall size={28} strokeWidth={1.5} />
+          <div className="flex flex-col items-center text-center">
+            <div className="mb-3 text-[#FFB1B1]">
+              <PhoneCall size={24} strokeWidth={1.5} />
             </div>
-            <div>
-              <h4 className="text-sm font-black text-[#4A3434] uppercase tracking-tighter">Online Support 24/7</h4>
-              <p className="text-[10px] text-gray-400 font-medium">Support online 24 hours a day</p>
-            </div>
+            <h4 className="text-[11px] font-black text-[#4A3434] uppercase tracking-widest mb-1">24/7 Support</h4>
+            <p className="text-[9px] text-gray-400 font-medium px-2">Always Online</p>
           </div>
 
-          {/* Money Return */}
-          <div className="flex items-center gap-4 group">
-            <div className="p-3 bg-white rounded-2xl shadow-sm text-[#FFB1B1] group-hover:bg-[#FFB1B1] group-hover:text-white transition-all duration-300">
-              <RotateCcw size={28} strokeWidth={1.5} />
+          <div className="flex flex-col items-center text-center border-t border-gray-50 pt-10 md:pt-0 md:border-t-0">
+            <div className="mb-3 text-[#FFB1B1]">
+              <RotateCcw size={24} strokeWidth={1.5} />
             </div>
-            <div>
-              <h4 className="text-sm font-black text-[#4A3434] uppercase tracking-tighter">Money Return</h4>
-              <p className="text-[10px] text-gray-400 font-medium">Back guarantee under 7 days</p>
-            </div>
+            <h4 className="text-[11px] font-black text-[#4A3434] uppercase tracking-widest mb-1">Easy Return</h4>
+            <p className="text-[9px] text-gray-400 font-medium px-2">7 Days Policy</p>
           </div>
 
-          {/* Member Discount */}
-          <div className="flex items-center gap-4 group">
-            <div className="p-3 bg-white rounded-2xl shadow-sm text-[#FFB1B1] group-hover:bg-[#FFB1B1] group-hover:text-white transition-all duration-300">
-              <BadgePercent size={28} strokeWidth={1.5} />
+          <div className="flex flex-col items-center text-center border-t border-gray-50 pt-10 md:pt-0 md:border-t-0">
+            <div className="mb-3 text-[#FFB1B1]">
+              <BadgePercent size={24} strokeWidth={1.5} />
             </div>
-            <div>
-              <h4 className="text-sm font-black text-[#4A3434] uppercase tracking-tighter">Member Discount</h4>
-              <p className="text-[10px] text-gray-400 font-medium">On every order over ₹5000.00</p>
-            </div>
+            <h4 className="text-[11px] font-black text-[#4A3434] uppercase tracking-widest mb-1">Discounts</h4>
+            <p className="text-[9px] text-gray-400 font-medium px-2">On ₹5000+ orders</p>
           </div>
 
         </div>
 
-        {/* --- 2. PROMO BANNER (Blue Accent like Screenshot) --- */}
-        <div className="bg-[#D1E1F0] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm border border-white/50">
-          <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
-            <h2 className="text-lg md:text-xl font-black text-[#2B5BA9] uppercase tracking-tighter">
-              Super discount for your <span className="underline decoration-wavy underline-offset-4">first purchase</span>
+        {/* --- 2. MINIMAL PROMO BAR --- */}
+        <div className="bg-[#D2D9E8] rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 overflow-hidden relative">
+          
+          <div className="z-10 text-center sm:text-left">
+            <h2 className="text-sm md:text-lg font-black text-[#2B5BA9] uppercase tracking-tight mb-2">
+              Get <span className="underline decoration-wavy underline-offset-4">10% OFF</span> on your first order
             </h2>
-            
-            <div className="flex items-center gap-3">
-               <div className="border-2 border-dashed border-[#2B5BA9] px-4 py-2 rounded-lg bg-white/50 font-bold text-[#2B5BA9] tracking-widest">
-                 WELCOME10
-               </div>
-               <p className="text-[11px] font-bold text-[#2B5BA9]/70 uppercase">Use discount code in the checkout!</p>
+            <div className="inline-flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-xl border border-white">
+              <span className="text-[10px] font-black text-[#2B5BA9] tracking-widest">WELCOME10</span>
             </div>
           </div>
 
-          <button className="bg-[#2B5BA9] text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-[0.2em] flex items-center gap-2 hover:bg-[#4A3434] transition-all shadow-md active:scale-95">
-            Shop Now <ArrowRight size={16} />
+          <button className="z-10 bg-[#2B5BA9] text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2 hover:bg-[#4A3434] transition-all active:scale-95 shadow-lg shadow-blue-200/50">
+            Shop Now <ArrowRight size={14} />
           </button>
+
+          {/* Abstract background shape for premium look */}
+          <div className="absolute right-[-5%] top-[-50%] w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
         </div>
 
       </div>
