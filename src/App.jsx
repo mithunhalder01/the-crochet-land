@@ -4,7 +4,7 @@ import FeaturesStrip from "./components/FeaturesStrip";
 import BottomNav from "./components/BottomNav";
 import ProductSlider from "./components/ProductSlider";
 import PromoBanner from "./components/PromoBanner";
-import CategoryGrid from "./components/categoryGrid";
+import CategoryGrid from "./components/CategoryGrid";
 import DiscountSection from "./components/DiscountSection";
 import CrochetBanner from "./components/CrochetB";
 import NewArrivals from "./components/NewArrivals";
