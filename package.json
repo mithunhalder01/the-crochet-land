@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://YOUR_USERNAME.github.io/the-crochet-land",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,7 +11,6 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
-
   },
   "dependencies": {
     "lucide": "^0.574.0",
@@ -20,7 +20,6 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.13.0",
     "swiper": "^12.1.1"
-
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
