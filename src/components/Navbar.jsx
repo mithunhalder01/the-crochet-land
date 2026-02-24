@@ -1,11 +1,30 @@
 import React, { useState } from "react";
+import { useAuth } from "../context/useAuth";
+import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+
 import {
   Menu, Search, User, ShoppingCart, ChevronDown, Phone, X,
-  Mail, Instagram, Facebook, Twitter, MessageCircle
+  Mail, Instagram, Facebook, Twitter, MessageCircle, ArrowLeft
 } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // Mobile search state
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/login");
+  };
+  
+  
 
   return (
     <header className="w-full sticky top-0 z-50 bg-white shadow-sm">
@@ -18,18 +37,36 @@ const Navbar = () => {
         />
       )}
 
-      {/* --- SIDEBAR MENU (Ab White hai) --- */}
+      {/* --- MOBILE SEARCH OVERLAY (Adds Blur & Expansion) --- */}
+      <div className={`fixed inset-0 bg-black/40 backdrop-blur-md z-[80] transition-all duration-300 md:hidden ${isSearchOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
+        <div className={`w-full bg-white p-4 shadow-xl transition-transform duration-300 ${isSearchOpen ? "translate-y-0" : "-translate-y-full"}`}>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setIsSearchOpen(false)} className="p-2 text-[#4A3434]">
+              <ArrowLeft size={24} />
+            </button>
+            <div className="flex-1 flex items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-100">
+              <input 
+                autoFocus={isSearchOpen}
+                type="text" 
+                placeholder="Search for products..." 
+                className="w-full bg-transparent outline-none text-[#4A3434] text-sm"
+              />
+              <Search size={20} className="text-gray-400" />
+            </div>
+          </div>
+        </div>
+        <div className="h-full w-full" onClick={() => setIsSearchOpen(false)} />
+      </div>
+
+      {/* --- SIDEBAR MENU --- */}
       <div className={`fixed top-0 left-0 h-full w-[320px] bg-white z-[70] shadow-2xl transform transition-transform duration-500 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="flex flex-col h-full overflow-y-auto custom-scrollbar">
-          
-          {/* Sidebar Header */}
           <div className="p-6 flex justify-between items-center border-b border-gray-100">
              <h2 className="text-xl font-bold text-[#4A3434]">The Crochet Land</h2>
              <X size={24} className="cursor-pointer text-gray-400" onClick={() => setIsOpen(false)} />
           </div>
 
           <div className="p-6">
-            {/* 1. BROWSE CATEGORIES */}
             <div className="mb-8">
               <p className="text-[11px] font-bold text-gray-400 tracking-widest uppercase mb-4">Browse Categories</p>
               <nav className="flex flex-col gap-4 text-[#4A3434] font-medium">
@@ -41,10 +78,7 @@ const Navbar = () => {
                 ))}
               </nav>
             </div>
-
             <hr className="my-6 border-gray-100" />
-
-            {/* 2. MAIN MENU */}
             <div className="mb-8">
               <p className="text-[11px] font-bold text-gray-400 tracking-widest uppercase mb-4">Main Menu</p>
               <nav className="flex flex-col gap-4 text-[#4A3434] font-medium">
@@ -53,53 +87,11 @@ const Navbar = () => {
                 ))}
               </nav>
             </div>
-
-            <hr className="my-6 border-gray-100" />
-
-            {/* 3. CONTACT DETAILS */}
-            <div className="mb-8">
-              <p className="text-[11px] font-bold text-gray-400 tracking-widest uppercase mb-4">Helps</p>
-              <div className="flex items-center gap-2 mb-6 cursor-pointer hover:text-[#FFB1B1] text-[#4A3434]">
-                <MessageCircle size={18} />
-                <span className="font-medium">Contact Support</span>
-              </div>
-
-              <p className="text-[11px] font-bold text-gray-400 tracking-widest uppercase mb-4">Contact Details</p>
-              <div className="space-y-6 text-[#4A3434]">
-                <div className="flex items-start gap-3">
-                  <Phone size={20} className="text-[#FFB1B1] mt-1" />
-                  <div>
-                    <p className="font-bold text-lg">+91 87804 06864</p>
-                    <p className="text-xs text-gray-400">Available 9 am to 6 pm</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Mail size={20} className="text-[#FFB1B1] mt-1" />
-                  <div>
-                    <p className="font-bold">contact@thecrochetland.in</p>
-                    <p className="text-xs text-gray-400">Response within 24 hours</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. SOCIAL ICONS */}
-            <div className="flex gap-4 mb-8">
-              <Instagram size={20} className="text-gray-400 cursor-pointer hover:text-[#FFB1B1] transition" />
-              <Facebook size={20} className="text-gray-400 cursor-pointer hover:text-[#FFB1B1] transition" />
-              <Twitter size={20} className="text-gray-400 cursor-pointer hover:text-[#FFB1B1] transition" />
-            </div>
-          </div>
-
-          {/* Sidebar Footer */}
-          <div className="mt-auto p-6 bg-gray-50 border-t border-gray-100 text-[11px] text-gray-400">
-            <p>Copyright 2026 © The Crochet Land.</p>
-            <p className="mt-1 font-medium text-[#FFB1B1]">Powered by Mithun's Dev Studio.</p>
           </div>
         </div>
       </div>
 
-      {/* --- MAIN HEADER (Ab White hai) --- */}
+      {/* --- MAIN HEADER --- */}
       <div className="bg-white px-4 md:px-8 py-4 md:py-6 relative border-b border-gray-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 md:gap-6">
@@ -112,14 +104,40 @@ const Navbar = () => {
           </div>
           
           <div className="flex items-center gap-4 md:gap-10">
-            <Search size={20} className="md:hidden cursor-pointer text-[#4A3434]" />
-            <div className="flex items-center gap-2 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] transition group">
+            {/* Mobile Search Icon - Click triggers logic */}
+            <Search 
+              size={20} 
+              className="md:hidden cursor-pointer text-[#4A3434]" 
+              onClick={() => setIsSearchOpen(true)} 
+            />
+            
+            <div
+              className="flex items-center gap-2 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] transition group"
+              onClick={() => {
+                if (user) {
+                  handleProfileClick();
+                } else {
+                  navigate("/login");
+                }
+              }}
+            >
               <User size={20} />
               <div className="text-sm hidden md:block">
-                <p className="text-gray-400 text-[10px]">Sign In</p>
+                <p className="text-gray-400 text-[10px]">
+                  {user ? `Hello, ${user.displayName}` : "Sign In"}
+                </p>
                 <p className="font-bold group-hover:text-[#FFB1B1]">Account</p>
               </div>
             </div>
+            {user && (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="hidden md:block text-xs font-semibold text-[#4A3434] hover:text-[#FFB1B1] transition"
+              >
+                Logout
+              </button>
+            )}
             <div className="flex items-center gap-2 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] relative transition group">
               <ShoppingCart size={20} />
               <div className="text-sm hidden md:block">
@@ -131,7 +149,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Search Bar - Desktop Only */}
+        {/* Search Bar - Desktop Only (No Design Change) */}
         <div className="hidden md:block md:w-[40%] md:absolute md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2">
           <div className="flex items-center w-full bg-gray-50 border border-transparent rounded-full px-5 py-2 shadow-sm focus-within:bg-white focus-within:border-gray-200 transition-all">
             <input type="text" placeholder="Search for products..." className="w-full px-2 py-1 outline-none text-sm bg-transparent text-[#4A3434]" />
@@ -150,5 +168,6 @@ const Navbar = () => {
     </header>
   );
 };
+
 
 export default Navbar;

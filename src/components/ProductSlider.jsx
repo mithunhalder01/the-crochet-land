@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ShoppingCart, Star, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingCart, Star, ArrowRight } from "lucide-react";
 
 const categories = ["All", "Accessories", "Bags", "Blankets", "Bouquets", "Flower Pots", "Plushies"];
 
@@ -21,14 +21,6 @@ const products = [
 export default function CompactProductSlider() {
   const [activeTab, setActiveTab] = useState("All");
   const scrollRef = useRef(null);
-
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  };
 
   return (
     <section className="bg-white py-10 select-none">
