@@ -3,9 +3,9 @@ import React from 'react';
 import { ArrowRight } from "lucide-react";
 
 const categories = [
-  { id: 1, name: "Bags", count: 6, image: "https://knotsnco.in/cdn/shop/files/Bags_category.png" },
-  { id: 2, name: "Plushies", count: 10, image: "https://knotsnco.in/cdn/shop/files/Plushies_category.png" },
-  { id: 3, name: "Keychain", count: 16, image: "https://knotsnco.in/cdn/shop/files/Keychain_category.png" },
+  { id: 1, name: "Bags", count: 6, image: "./bags.png" },
+  { id: 2, name: "Plushies", count: 10, image: "./plush.png" },
+  { id: 3, name: "Keychain", count: 16, image: "./keychain.png" },
   { id: 4, name: "Bouquets", count: 42, image: "https://knotsnco.in/cdn/shop/files/Bouquets_category.png" },
 ];
 
