@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import { useAuth } from "./context/useAuth";
+import Shop from "./pages/Shop";
 
 
 
@@ -25,11 +26,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/product/:slug" element={<ProductDetail />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={< Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
-        
+
       </div>
 
       <Footer />

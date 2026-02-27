@@ -1,19 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 
 import {
   Menu, Search, User, ShoppingCart, ChevronDown, Phone, X,
-  Mail, Instagram, Facebook, Twitter, MessageCircle, ArrowLeft
+  Mail, Instagram, Facebook, Twitter, MessageCircle, ArrowLeft, LogOut
 } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // Mobile search state
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false); // Mobile cart toggle state
+  const cartRef = useRef(null);
+  
   const { user } = useAuth();
   const navigate = useNavigate();
   const auth = getAuth();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        setIsCartOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleProfileClick = () => {
     navigate("/profile");
@@ -23,8 +37,6 @@ const Navbar = () => {
     await signOut(auth);
     navigate("/login");
   };
-  
-  
 
   return (
     <header className="w-full sticky top-0 z-50 bg-white shadow-sm">
@@ -37,7 +49,7 @@ const Navbar = () => {
         />
       )}
 
-      {/* --- MOBILE SEARCH OVERLAY (Adds Blur & Expansion) --- */}
+      {/* --- MOBILE SEARCH OVERLAY --- */}
       <div className={`fixed inset-0 bg-black/40 backdrop-blur-md z-[80] transition-all duration-300 md:hidden ${isSearchOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
         <div className={`w-full bg-white p-4 shadow-xl transition-transform duration-300 ${isSearchOpen ? "translate-y-0" : "-translate-y-full"}`}>
           <div className="flex items-center gap-3">
@@ -104,7 +116,6 @@ const Navbar = () => {
           </div>
           
           <div className="flex items-center gap-4 md:gap-10">
-            {/* Mobile Search Icon - Click triggers logic */}
             <Search 
               size={20} 
               className="md:hidden cursor-pointer text-[#4A3434]" 
@@ -113,13 +124,7 @@ const Navbar = () => {
             
             <div
               className="flex items-center gap-2 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] transition group"
-              onClick={() => {
-                if (user) {
-                  handleProfileClick();
-                } else {
-                  navigate("/login");
-                }
-              }}
+              onClick={() => user ? handleProfileClick() : navigate("/login")}
             >
               <User size={20} />
               <div className="text-sm hidden md:block">
@@ -129,27 +134,58 @@ const Navbar = () => {
                 <p className="font-bold group-hover:text-[#FFB1B1]">Account</p>
               </div>
             </div>
+
             {user && (
               <button
                 type="button"
                 onClick={handleLogout}
-                className="hidden md:block text-xs font-semibold text-[#4A3434] hover:text-[#FFB1B1] transition"
+                className="hidden md:flex items-center gap-1 text-xs font-semibold text-[#4A3434] hover:text-[#FFB1B1] transition"
               >
+                <LogOut size={14} />
                 Logout
               </button>
             )}
-            <div className="flex items-center gap-2 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] relative transition group">
-              <ShoppingCart size={20} />
-              <div className="text-sm hidden md:block">
-                <p className="text-gray-400 text-[10px]">Total</p>
-                <p className="font-bold group-hover:text-[#FFB1B1]">₹0.00</p>
+
+            {/* --- RESPONSIVE CART DROPDOWN --- */}
+            <div className="relative" ref={cartRef}>
+              <div 
+                className="flex items-center gap-2 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] transition group"
+                onClick={() => setIsCartOpen(!isCartOpen)}
+              >
+                <ShoppingCart size={20} />
+                <div className="text-sm hidden md:block">
+                  <p className="text-gray-400 text-[10px]">Total</p>
+                  <p className="font-bold group-hover:text-[#FFB1B1]">₹0.00</p>
+                </div>
+                <span className="absolute -top-2 left-4 bg-[#FFB1B1] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
               </div>
-              <span className="absolute -top-2 left-4 bg-[#FFB1B1] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
+
+              {/* DROPDOWN Logic: Responsive & Click Outside Support */}
+              <div className={`
+                absolute right-0 top-full pt-4 transition-all duration-300 z-[100]
+                ${isCartOpen ? "opacity-100 visible" : "opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible"}
+              `}>
+                <div className="bg-white border border-gray-100 shadow-2xl rounded-2xl p-6 w-[280px] md:w-64 text-center">
+                  <div className="flex justify-center mb-4 text-gray-200">
+                    <ShoppingCart size={40} strokeWidth={1} />
+                  </div>
+                  <p className="text-[#4A3434] font-medium text-sm mb-4">Your cart is empty</p>
+                  <button 
+                    onClick={() => {
+                      setIsCartOpen(false);
+                      navigate('/shop');
+                    }}
+                    className="w-full bg-[#4A3434] text-white py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#FFB1B1] transition-colors shadow-md"
+                  >
+                    Shop Now
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Search Bar - Desktop Only (No Design Change) */}
+        {/* Search Bar - Desktop Only */}
         <div className="hidden md:block md:w-[40%] md:absolute md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2">
           <div className="flex items-center w-full bg-gray-50 border border-transparent rounded-full px-5 py-2 shadow-sm focus-within:bg-white focus-within:border-gray-200 transition-all">
             <input type="text" placeholder="Search for products..." className="w-full px-2 py-1 outline-none text-sm bg-transparent text-[#4A3434]" />
@@ -168,6 +204,5 @@ const Navbar = () => {
     </header>
   );
 };
-
 
 export default Navbar;

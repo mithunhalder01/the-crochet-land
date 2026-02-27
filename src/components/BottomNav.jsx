@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Search, User, LayoutGrid } from 'lucide-react';
+import { Home, Search, User, Store } from 'lucide-react'; // Store icon import kiya
 import { useNavigate } from 'react-router-dom';
 
 const BottomNav = ({ setIsSidebarOpen }) => {
@@ -25,7 +25,7 @@ const BottomNav = ({ setIsSidebarOpen }) => {
             className="flex flex-col items-center gap-1 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] transition-all active:scale-90"
           >
             <Home size={22} strokeWidth={1.8} />
-            <span className="text-[9px] font-bold uppercase tracking-widest">Store</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest">Home</span>
           </div>
 
           {/* Search */}
@@ -46,13 +46,13 @@ const BottomNav = ({ setIsSidebarOpen }) => {
             <span className="text-[9px] font-bold uppercase tracking-widest">Account</span>
           </div>
 
-          {/* Categories */}
+          {/* Shop (Menu ki jagah replace kiya) */}
           <div 
-            onClick={() => setIsSidebarOpen(true)}
+            onClick={() => navigate('/shop')}
             className="flex flex-col items-center gap-1 cursor-pointer text-[#4A3434] hover:text-[#FFB1B1] transition-all active:scale-90"
           >
-            <LayoutGrid size={22} strokeWidth={1.8} />
-            <span className="text-[9px] font-bold uppercase tracking-widest">Menu</span>
+            <Store size={22} strokeWidth={1.8} />
+            <span className="text-[9px] font-bold uppercase tracking-widest">Shop</span>
           </div>
 
         </div>
