@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function MinimalCTA() {
   return (
@@ -28,12 +29,12 @@ export default function MinimalCTA() {
 
           {/* Right: Big Minimal Button */}
           <div className="w-full md:w-auto">
-            <button className="group w-full md:w-auto flex items-center justify-center gap-4 bg-[#2B5BA9] text-white px-10 py-5 rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-lg shadow-blue-200 transition-all hover:bg-[#4A3434] active:scale-95">
+            <Link to="/shop" className="group w-full md:w-auto flex items-center justify-center gap-4 bg-[#2B5BA9] text-white px-10 py-5 rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-lg shadow-blue-200 transition-all hover:bg-[#4A3434] active:scale-95">
               <span>Shop Now</span>
               <div className="bg-white/20 p-1 rounded-lg transition-transform group-hover:translate-x-1">
                 <ArrowRight size={20} />
               </div>
-            </button>
+            </Link>
           </div>
 
           {/* Background Decorative Circles (Very Subtle) */}

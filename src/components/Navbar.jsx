@@ -1,18 +1,31 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
+import { products } from "../data/products";
 
 import {
   Menu, Search, User, ShoppingCart, ChevronDown, Phone, X,
   Mail, Instagram, Facebook, Twitter, MessageCircle, ArrowLeft, LogOut
 } from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({ cart = {} }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false); // Mobile cart toggle state
   const cartRef = useRef(null);
+
+  const totalItems = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+  const cartItems = useMemo(() => {
+    return Object.entries(cart)
+      .map(([id, qty]) => {
+        const product = products.find((p) => p.id === Number(id));
+        if (!product) return null;
+        return { ...product, qty };
+      })
+      .filter(Boolean);
+  }, [cart]);
+  const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
   
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -155,9 +168,11 @@ const Navbar = () => {
                 <ShoppingCart size={20} />
                 <div className="text-sm hidden md:block">
                   <p className="text-gray-400 text-[10px]">Total</p>
-                  <p className="font-bold group-hover:text-[#FFB1B1]">₹0.00</p>
+                  <p className="font-bold group-hover:text-[#FFB1B1]">₹{cartTotal}.00</p>
                 </div>
-                <span className="absolute -top-2 left-4 bg-[#FFB1B1] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
+                <span className="absolute -top-2 left-4 bg-[#FFB1B1] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow-sm">
+                  {totalItems}
+                </span>
               </div>
 
               {/* DROPDOWN Logic: Responsive & Click Outside Support */}
@@ -165,20 +180,60 @@ const Navbar = () => {
                 absolute right-0 top-full pt-4 transition-all duration-300 z-[100]
                 ${isCartOpen ? "opacity-100 visible" : "opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible"}
               `}>
-                <div className="bg-white border border-gray-100 shadow-2xl rounded-2xl p-6 w-[280px] md:w-64 text-center">
-                  <div className="flex justify-center mb-4 text-gray-200">
-                    <ShoppingCart size={40} strokeWidth={1} />
-                  </div>
-                  <p className="text-[#4A3434] font-medium text-sm mb-4">Your cart is empty</p>
-                  <button 
-                    onClick={() => {
-                      setIsCartOpen(false);
-                      navigate('/shop');
-                    }}
-                    className="w-full bg-[#4A3434] text-white py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#FFB1B1] transition-colors shadow-md"
-                  >
-                    Shop Now
-                  </button>
+                <div className="bg-white border border-gray-100 shadow-2xl rounded-2xl p-6 w-[280px] md:w-64">
+                  {cartItems.length === 0 ? (
+                    <div className="text-center">
+                      <div className="flex justify-center mb-4 text-gray-200">
+                        <ShoppingCart size={40} strokeWidth={1} />
+                      </div>
+                      <p className="text-[#4A3434] font-medium text-sm mb-4">Your cart is empty</p>
+                      <button 
+                        onClick={() => {
+                          setIsCartOpen(false);
+                          navigate('/shop');
+                        }}
+                        className="w-full bg-[#4A3434] text-white py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#FFB1B1] transition-colors shadow-md"
+                      >
+                        Shop Now
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="space-y-3 mb-4 max-h-56 overflow-auto pr-1">
+                        {cartItems.map((item) => (
+                          <div key={item.id} className="flex items-center gap-3">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-12 h-12 rounded-lg object-cover border border-gray-100"
+                            />
+                            <div className="flex-1">
+                              <p className="text-[11px] font-bold text-[#4A3434] uppercase line-clamp-1">
+                                {item.name}
+                              </p>
+                              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                                Qty {item.qty}
+                              </p>
+                            </div>
+                            <p className="text-xs font-black text-[#4A3434]">₹{item.price * item.qty}.00</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between border-t border-gray-100 pt-3 mb-3">
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Subtotal</p>
+                        <p className="text-sm font-black text-[#4A3434]">₹{cartTotal}.00</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsCartOpen(false);
+                          navigate('/shop');
+                        }}
+                        className="w-full bg-[#4A3434] text-white py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#FFB1B1] transition-colors shadow-md"
+                      >
+                        View Cart
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

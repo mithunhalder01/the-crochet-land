@@ -1,41 +1,52 @@
 import React, { useState, useRef } from 'react';
-import { ShoppingCart, Star, ArrowRight } from "lucide-react";
+import { ShoppingCart, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { productsData } from "../data/products"; 
 
-const categories = ["All", "Accessories", "Bags", "Blankets", "Bouquets", "Flower Pots", "Plushies"];
+const categories = ["All", "Bouquets", "Flower pots", "Keychains", "Accessories", "Bags", "Blankets"];
 
-const products = [
-  { id: 1, name: "Gulabi Guldasta", price: 1999, oldPrice: 2600, discount: "24%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Gulabi_Guldasta.jpg" },
-  { id: 2, name: "Purple Paradise", price: 1689, oldPrice: 1999, discount: "16%", rating: 4, image: "https://knotsnco.in/cdn/shop/files/Purple_paradise.jpg" },
-  { id: 3, name: "Blue Lagoon", price: 1175, oldPrice: 1800, discount: "35%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Blue_Lagoon.jpg" },
-  { id: 4, name: "Daisy Bouquet", price: 750, oldPrice: 900, discount: "17%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Daisy_bouquet.jpg" },
-  { id: 5, name: "Tulip Mix", price: 1200, oldPrice: 1500, discount: "20%", rating: 4, image: "https://knotsnco.in/cdn/shop/files/Tulip_bouquet.jpg" },
-  { id: 6, name: "Mini Sunflower", price: 899, oldPrice: 1100, discount: "18%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Daisy_bouquet.jpg" },
-  { id: 7, name: "Cute Plushie", price: 450, oldPrice: 600, discount: "25%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Purple_paradise.jpg" },
-  { id: 8, name: "Red Rose Trio", price: 2100, oldPrice: 2500, discount: "16%", rating: 4, image: "https://knotsnco.in/cdn/shop/files/Gulabi_Guldasta.jpg" },
-  { id: 9, name: "Lavender Pot", price: 1400, oldPrice: 1800, discount: "22%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Blue_Lagoon.jpg" },
-  { id: 10, name: "Berry Bouquet", price: 999, oldPrice: 1300, discount: "23%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Daisy_bouquet.jpg" },
-  { id: 11, name: "Pastel Dream", price: 1550, oldPrice: 1900, discount: "18%", rating: 5, image: "https://knotsnco.in/cdn/shop/files/Purple_paradise.jpg" },
-  { id: 12, name: "Sunny Daisy", price: 650, oldPrice: 850, discount: "23%", rating: 4, image: "https://knotsnco.in/cdn/shop/files/Daisy_bouquet.jpg" },
-];
-
-export default function CompactProductSlider() {
-  const [activeTab, setActiveTab] = useState("All");
+export default function CompactProductSlider({ cart, setCart }) {
+  const [activeTab, setActiveTab] = useState("ALL");
   const scrollRef = useRef(null);
 
+  const filteredProducts = productsData.filter((p) => {
+    if (activeTab === "ALL") return true;
+    return p.category.toUpperCase() === activeTab.toUpperCase();
+  });
+
+  const handleAddToCart = (id) => {
+    setCart((prev) => ({ ...prev, [id]: 1 }));
+  };
+
+  const increaseQty = (id) => {
+    setCart((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+  };
+
+  const decreaseQty = (id) => {
+    setCart((prev) => {
+      if (prev[id] === 1) {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      }
+      return { ...prev, [id]: prev[id] - 1 };
+    });
+  };
+
   return (
-    <section className="bg-white py-10 select-none">
+    <section className="bg-white py-6 md:py-10 select-none overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-4">
         
-        {/* --- 1. MINIMAL CATEGORY FILTER --- */}
-        <div className="flex items-center justify-center gap-2 md:gap-4 mb-10 overflow-x-auto pb-2 scrollbar-hide">
+        {/* --- 1. CATEGORY FILTER (Mobile Friendly) --- */}
+        <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 md:justify-center md:mx-0">
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveTab(cat)}
-              className={`whitespace-nowrap px-5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-tighter transition-all ${
-                activeTab === cat 
-                ? "bg-[#D1E1F0] text-[#4A3434]" 
-                : "bg-gray-50 text-gray-400 hover:bg-gray-100"
+              onClick={() => setActiveTab(cat.toUpperCase())}
+              className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl text-[10px] md:text-[11px] font-bold transition-all border whitespace-nowrap ${
+                activeTab === cat.toUpperCase() 
+                ? "bg-[#4A3434] border-[#4A3434] text-white shadow-md" 
+                : "bg-white border-gray-100 text-gray-400"
               }`}
             >
               {cat}
@@ -43,62 +54,76 @@ export default function CompactProductSlider() {
           ))}
         </div>
 
-        {/* --- 2. COMPACT SLIDER --- */}
+        {/* --- 2. PRODUCT SLIDER (Mobile Responsive) --- */}
         <div className="relative group">
           <div 
             ref={scrollRef}
-            className="flex overflow-x-auto gap-4 pb-6 scrollbar-hide snap-x"
+            className="flex overflow-x-auto gap-4 md:gap-6 pb-8 scrollbar-hide snap-x snap-mandatory"
           >
-            {products.map((product) => (
-              <div 
-                key={product.id} 
-                className="min-w-[160px] md:min-w-[240px] snap-start bg-white border border-gray-100 rounded-lg overflow-hidden flex flex-col hover:shadow-md transition-shadow"
+            {filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="min-w-[75%] sm:min-w-[45%] md:min-w-[30%] lg:min-w-[23%] snap-start bg-white rounded-[2rem] border border-gray-50/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col group transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)]"
               >
                 {/* Image Section */}
-                <div className="relative aspect-square overflow-hidden bg-gray-50">
-                  <span className="absolute top-2 left-2 z-10 bg-[#2B5BA9] text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                    {product.discount}
-                  </span>
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-
-                {/* Info Section */}
-                <div className="p-3 flex flex-col flex-grow">
-                  <div className="flex items-center justify-center gap-0.5 mb-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={8} fill={i < product.rating ? "#FACC15" : "none"} stroke={i < product.rating ? "#FACC15" : "#D1D5DB"} />
-                    ))}
+                <Link to={`/product/${product.id}`} className="block p-3">
+                  <div className="relative aspect-square overflow-hidden bg-[#FAF9F6] rounded-[1.5rem]">
+                    <span className="absolute top-2 left-2 z-10 bg-[#4A3434] text-white text-[8px] md:text-[9px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                      {product.discount}% OFF
+                    </span>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
                   </div>
-                  
-                  <h3 className="text-[11px] md:text-[13px] font-bold text-[#4A3434] uppercase tracking-tight text-center line-clamp-1 mb-1">
-                    {product.name}
-                  </h3>
-                  
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <span className="text-[10px] text-gray-300 line-through">₹{product.oldPrice}</span>
-                    <span className="text-[12px] md:text-sm font-black text-[#2B5BA9]">₹{product.price}</span>
+                </Link>
+
+                {/* Content Section */}
+                <div className="px-4 pb-5 text-center flex-1 flex flex-col">
+                  <Link to={`/product/${product.id}`}>
+                    <h3 className="font-bold text-[#4A3434] text-[12px] md:text-[14px] mb-1.5 uppercase tracking-wide line-clamp-1">
+                      {product.name}
+                    </h3>
+                  </Link>
+
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <span className="text-gray-300 line-through text-[9px] md:text-[11px]">₹{product.oldPrice}</span>
+                    <span className="text-[#3A56AF] text-sm md:text-lg font-black">₹{product.price}</span>
                   </div>
 
-                  {/* Add to Cart - Compact & Bottom */}
-                  <button className="w-full mt-auto bg-[#2B5BA9] text-white py-2 rounded text-[9px] font-bold uppercase tracking-widest hover:bg-[#4A3434] transition-colors flex items-center justify-center gap-1.5">
-                    <ShoppingCart size={12} /> Add
-                  </button>
+                  {/* Button Logic */}
+                  <div className="mt-auto space-y-2">
+                    {cart[product.id] ? (
+                      <div className="flex items-center justify-between bg-[#4A3434] text-white rounded-xl px-3 py-2 shadow-md">
+                        <button onClick={() => decreaseQty(product.id)} className="text-lg font-bold px-1 active:scale-90">-</button>
+                        <span className="font-bold text-xs">{cart[product.id]}</span>
+                        <button onClick={() => increaseQty(product.id)} className="text-lg font-bold px-1 active:scale-90">+</button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleAddToCart(product.id)}
+                        className="w-full bg-[#4A3434] text-white py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#3A56AF] transition-all font-bold text-[9px] md:text-[10px] uppercase tracking-widest active:scale-95 shadow-sm"
+                      >
+                        <ShoppingCart size={14} /> Add
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* --- 3. SHOW MORE (Right Aligned) --- */}
-        <div className="flex justify-end mt-4">
-          <button className="flex items-center gap-1.5 text-[#4A3434] hover:text-[#FFB1B1] text-[11px] font-black uppercase tracking-widest transition-all group">
-            View All 
+        {/* --- 3. VIEW ALL --- */}
+        <div className="flex justify-between items-center mt-2 px-1">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+            {filteredProducts.length} Products Found
+          </p>
+          <Link to="/shop" className="flex items-center gap-1 text-[#4A3434] hover:text-[#3A56AF] text-[10px] font-black uppercase tracking-widest transition-all group">
+            Shop All 
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
         </div>
 
       </div>

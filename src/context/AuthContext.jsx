@@ -8,11 +8,12 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../firebase.js";
 import { AuthContext } from "./auth-context";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const googleProvider = new GoogleAuthProvider();
 
@@ -50,6 +51,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -57,9 +59,9 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, signup, login, loginWithGoogle, logout }}
+      value={{ user, loading, signup, login, loginWithGoogle, logout }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

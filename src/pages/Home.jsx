@@ -11,11 +11,13 @@ import CTACard from "../components/CTACard";
 
 
 
-export default function Home() {
+
+export default function Home({ cart, setCart }) {
   return (
     <>
+
       <HeroSlider />
-      <ProductSlider />
+      <ProductSlider cart={cart} setCart={setCart} />
       <PromoBanner />
       <CategoryGrid />
       <CrochetBanner />

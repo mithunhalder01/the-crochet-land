@@ -1,5 +1,6 @@
 import React from 'react';
 import { Truck, PhoneCall, RotateCcw, BadgePercent, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function CompactTrustSection() {
   return (
@@ -56,9 +57,12 @@ export default function CompactTrustSection() {
             </div>
           </div>
 
-          <button className="z-10 bg-[#2B5BA9] text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2 hover:bg-[#4A3434] transition-all active:scale-95 shadow-lg shadow-blue-200/50">
+          <Link
+            to="/shop"
+            className="z-10 bg-[#2B5BA9] text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-2 hover:bg-[#4A3434] transition-all active:scale-95 shadow-lg shadow-blue-200/50"
+          >
             Shop Now <ArrowRight size={14} />
-          </button>
+          </Link>
 
           {/* Abstract background shape for premium look */}
           <div className="absolute right-[-5%] top-[-50%] w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
